@@ -4,98 +4,83 @@ package fr.diginamic.recensement.entites;
  * @author DIGINAMIC
  *
  */
-public class Ville implements EnsemblePop {
+public class Ville implements EnsemblePop, ObjectDB {
 	
-	/** codeRegion : code de la région */
-	private String codeRegion;
-	/** nomRegion : nom de la région */
-	private String nomRegion;
-	/** codeDepartement : code du département */
-	private String codeDepartement;
+	/** identifiant unique */
+	private int id;
 	/** code INSEE de la ville */
-	private String codeVille;
+	private String code;
 	/** nom de la ville */
 	private String nom;
 	/** population totale */
 	private int population;
+	/** departement : Département */
+	private Departement departement;
+	
 	
 	/** Constructeur
-	 * @param codeRegion code de la région
-	 * @param nomRegion nom de la région
-	 * @param codeDepartement code du département
+	 * @param département
 	 * @param codeVille code INSEE de la ville
 	 * @param nom nom de la ville
 	 * @param population population totale
 	 */
-	public Ville(String codeRegion, String nomRegion, String codeDepartement, String codeVille, String nom, int population) {
-		super();
-		this.codeRegion=codeRegion;
-		this.nomRegion=nomRegion;
-		this.codeDepartement=codeDepartement;
-		this.codeVille = codeVille;
+	public Ville(String code, String nom, int population, Departement departement) {
+		this.departement = departement;
+		this.code = code;
 		this.nom = nom;
 		this.population = population;
 	}
 	
+	public Ville(int id, String code, String nom, int population, Departement departement) {
+		this(code, nom, population, departement);
+		this.id = id;
+	}
+
 	@Override
 	public String toString(){
 		return nom + " " + population + " hab.";
 	}
 
 	/** Getter
-	 * @return the codeRegion
+	 * @return the id
 	 */
-	public String getCodeRegion() {
-		return codeRegion;
+	public int getId() {
+		return id;
 	}
 
 	/** Setter
-	 * @param codeRegion the codeRegion to set
+	 * @param id the id to set
 	 */
-	public void setCodeRegion(String codeRegion) {
-		this.codeRegion = codeRegion;
-	}
-
-	/** Getter
-	 * @return the nomRegion
-	 */
-	public String getNomRegion() {
-		return nomRegion;
-	}
-
-	/** Setter
-	 * @param nomRegion the nomRegion to set
-	 */
-	public void setNomRegion(String nomRegion) {
-		this.nomRegion = nomRegion;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/** Getter
 	 * @return the codeDepartement
 	 */
-	public String getCodeDepartement() {
-		return codeDepartement;
+	public Departement getDepartement() {
+		return departement;
 	}
 
 	/** Setter
 	 * @param codeDepartement the codeDepartement to set
 	 */
-	public void setCodeDepartement(String codeDepartement) {
-		this.codeDepartement = codeDepartement;
+	public void setDepartement(Departement departement) {
+		this.departement = departement;
 	}
 
 	/** Getter
 	 * @return the codeVille
 	 */
-	public String getCodeVille() {
-		return codeVille;
+	public String getCode() {
+		return code;
 	}
 
 	/** Setter
-	 * @param codeVille the codeVille to set
+	 * @param codeVille the code to set
 	 */
-	public void setCodeVille(String codeVille) {
-		this.codeVille = codeVille;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	/** Getter
@@ -124,6 +109,15 @@ public class Ville implements EnsemblePop {
 	 */
 	public void setPopulation(int population) {
 		this.population = population;
+	}
+	
+	/**
+	 * Equals
+	 * Deux villes sont considérées comme représentant la même ville si elles ont le même code et le même nom
+	 */
+	@Override
+	public boolean equals(Object o){
+		return o instanceof Ville && ((Ville)o).getCode().equals(this.getCode()) && ((Ville)o).getNom().equals(this.getNom());  
 	}
 
 }

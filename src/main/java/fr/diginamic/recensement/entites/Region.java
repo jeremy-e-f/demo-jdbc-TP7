@@ -1,40 +1,51 @@
 package fr.diginamic.recensement.entites;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /** Représente une région
  * @author DIGINAMIC
  *
  */
-public class Region implements EnsemblePop {
+public class Region implements ObjectDB, EnsemblePop {
 
+	/** identifiant unique */
+	private int id;
 	/** code : String*/
 	private String code;
 	/** nom : String*/
 	private String nom;
-	/** population : int*/
+	/** population : int */
 	private int population;
-	
-	/** villes : List<Ville>*/
-	private List<Ville> villes = new ArrayList<>();
 	
 	/** Constructeur
 	 * @param code code
 	 * @param nom nom
 	 */
 	public Region(String code, String nom) {
-		super();
 		this.code = code;
 		this.nom = nom;
 	}
 	
-	/** Ajoute une ville
-	 * @param ville ville
+	public Region(int id, String code, String nom) {
+		this(code, nom);
+		this.id = id;
+	}
+	
+	public Region(int id, String code, String nom, int population) {
+		this(id, code, nom);
+		this.population = population;
+	}
+	
+	/** Getter
+	 * @return the id
 	 */
-	public void addVille(Ville ville){
-		villes.add(ville);
-		this.population=this.population+ville.getPopulation();
+	public int getId() {
+		return id;
+	}
+
+	/** Setter
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	/** Getter
@@ -61,12 +72,14 @@ public class Region implements EnsemblePop {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+	
 	/** Getter
 	 * @return the population
 	 */
 	public int getPopulation() {
 		return population;
 	}
+	
 	/** Setter
 	 * @param population the population to set
 	 */
@@ -74,5 +87,18 @@ public class Region implements EnsemblePop {
 		this.population = population;
 	}
 
+	@Override
+	public String toString() {
+		return "Region [code=" + code + ", nom=" + nom + "]";
+	}
 	
+	/**
+	 * Equals
+	 * Deux régions sont considérées comme représentant la même région si elles ont le même code
+	 */
+	@Override
+	public boolean equals(Object o){
+		return o instanceof Region && ((Region)o).getCode().equals(this.getCode());  
+	}
+
 }

@@ -1,10 +1,12 @@
 package fr.diginamic.recensement.services;
 
-import java.util.List;
+import java.text.NumberFormat;
 import java.util.Scanner;
 
-import fr.diginamic.recensement.entites.Recensement;
-import fr.diginamic.recensement.entites.Ville;
+import fr.diginamic.dao.RegionDao;
+import fr.diginamic.dao.jdbc.RegionDaoJdbc;
+import fr.diginamic.exceptions.FonctionnalException;
+import fr.diginamic.recensement.entites.Region;
 
 /** Recherche et affichage de la population d'une région
  * @author DIGINAMIC
@@ -13,26 +15,24 @@ import fr.diginamic.recensement.entites.Ville;
 public class RecherchePopulationRegionService extends MenuService {
 
 	@Override
-	public void traiter(Recensement rec, Scanner scanner) {
+	public void traiter(Scanner scanner) throws FonctionnalException {
 		
+		/** Saisie des paramètres */
 		System.out.println("Quel est le code de la région recherchée ? ");
-		String choix = scanner.nextLine();
+		String choix = scanner.nextLine().trim();
 		
-		List<Ville> villes = rec.getVilles();
-		int somme = 0;
-		String nom = null;
-		for (Ville ville: villes){
-			if (ville.getCodeRegion().equalsIgnoreCase(choix)){
-				somme+=ville.getPopulation();
-				nom=ville.getNomRegion();
-			}
+		/** On récupère la région */
+		RegionDao regDao= new RegionDaoJdbc();
+		Region region= regDao.getByCode(choix);
+		
+		/** On affiche les résultats */
+		System.out.println("\n\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\n");
+		if(region== null){
+			throw new FonctionnalException("La région de code \""+choix+"\" n'a pas été trouvée.");
+		}else{
+			System.out.println("Population de la région de code \""+region.getCode()+"\" : "+(NumberFormat.getInstance().format(region.getPopulation()))+"\n("+region+")");
 		}
-		if (somme>0){
-			System.out.println("Population de la région "+nom+" : "+ somme);
-		}
-		else {
-			System.out.println("Région "+choix+" non trouvée.");
-		}
+		System.out.println("\n\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\n");
 	}
 
 }
